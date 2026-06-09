@@ -16,3 +16,6 @@ dist/
 
 # generated demo artifacts
 demos/out/
+
+# Licensed GMS demo data (not redistributed)
+demos/data/
