@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # glassloop (the base library) is public but not on PyPI yet, so install it
+      # from its public repo. ONCE glassloop IS ON PyPI: delete this line —
+      # `glassloop` is already declared in pyproject dependencies, so the editable
+      # install below will resolve it from PyPI automatically.
+      - name: Install glassloop (public base) + proofloop
+        run: |
+          python -m pip install --upgrade pip
+          pip install "glassloop @ git+https://github.com/knowlytix/beyond-prompt-and-pray.git"
+          pip install -e ".[dev]"
+      - name: Test (knowlytix absent — GMS-gated tests skip)
+        run: pytest -q

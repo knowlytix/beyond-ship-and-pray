@@ -7,10 +7,9 @@ name = "proofloop"
 version = "0.0.1"
 description = "Test, validate and monitor agentic AI — DoE suites, validation reports, and real-time runtime gates. GMS-optional."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 license = { file = "LICENSE" }
-authors = [{ name = "A. Sudjianto" }]
-maintainers = [{ name = "Knowlytix" }]
+authors = [{ name = "Knowlytix" }]
 keywords = ["ai-agents", "testing", "validation", "evaluation", "runtime-monitoring", "doe", "hallucination", "llm"]
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
@@ -38,3 +37,8 @@ GMS = "https://knowlytix.ai/"
 
 [tool.setuptools.packages.find]
 include = ["proofloop*"]
+
+[tool.pytest.ini_options]
+# Scope collection to our own tests so a CI-time checkout of the glassloop
+# sibling repo (into ./_glassloop) is not also collected.
+testpaths = ["tests"]
