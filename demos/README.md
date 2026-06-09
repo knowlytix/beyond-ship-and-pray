@@ -4,6 +4,23 @@ Two runnable demos showing the open baseline and where the optional GMS backend
 lifts it. Both run with **no license**; the GMS sections light up when the
 licensed `knowlytix` backend **and** a trained store are present.
 
+## `demo.ipynb` — the presentation notebook (recommended for live demos)
+
+One **end-to-end story**: a banking-complaint agent is governed through a single
+run — it pulls a customer's PII into the case notes (policy gate **escalates**),
+then tries to skip straight to drafting the reply (GMS geometric gate **denies**
+the out-of-scope step), and finally **escalates to a human** — one audit chain,
+followed by the calibration/validation that proves the guard. Needs the licensed
+`knowlytix` backend + the trained store.
+
+```bash
+pip install "proofloop[notebooks,gms]"   # gms = licensed knowlytix (see below)
+export KNOWLYTIX_LICENSE_KEY=...          # and the trained store in demos/data/
+jupyter lab demos/demo.ipynb             # then: Kernel → Restart & Run All
+```
+
+The `.py` demos below are the scriptable / CI-friendly versions of the same tech.
+
 ## Setup (open baseline — no license)
 
 ```bash

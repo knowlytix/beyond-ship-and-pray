@@ -61,9 +61,10 @@ def load_banking_store() -> tuple[Any, float]:
     import contextlib
     import io
 
-    # The knowlytix backend prints a license banner + store stats on import/load.
-    # Suppress that chatter so the demo output stays clean; errors still raise.
-    with contextlib.redirect_stdout(io.StringIO()):
+    # The knowlytix backend prints a license banner (stderr) + store stats
+    # (stdout) on import/load. Suppress both so the demo output stays clean;
+    # exceptions still propagate with their messages.
+    with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
         import torch
         from knowlytix.knowledge.query import DocGMSConfig, GMSExpertStore
 
