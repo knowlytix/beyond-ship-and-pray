@@ -13,3 +13,6 @@ dist/
 *.out
 *.toc
 .DS_Store
+
+# generated demo artifacts
+demos/out/
