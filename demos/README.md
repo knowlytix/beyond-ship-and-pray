@@ -7,10 +7,12 @@ licensed `knowlytix` backend **and** a trained store are present.
 ## Setup (open baseline — no license)
 
 ```bash
-# from the repo root, editable installs of the base + this package
-pip install -e ../beyond-prompt-and-pray   # glassloop (base library)
-pip install -e .                            # proofloop
+pip install proofloop          # pulls glassloop (the base library) from PyPI automatically
 ```
+
+Then run the demos from the repo root (clone it — the demos aren't in the wheel).
+Prefer a local checkout for development? Use editable installs instead:
+`pip install -e ../beyond-prompt-and-pray -e .`
 
 ## Demo 2 — runtime monitoring
 

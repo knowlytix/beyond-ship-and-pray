@@ -42,6 +42,37 @@ pip install "proofloop[gms]"          # + the licensed GMS backend (knowlytix)
 `proofloop` builds on [`glassloop`](https://github.com/knowlytix/beyond-prompt-and-pray)
 (the governed agent loop) and adds the testing, validation, and monitoring layer.
 
+## Quickstart
+
+Declare the behavior space you care about; get a balanced test matrix that covers
+it (instead of cherry-picked cases):
+
+```python
+from proofloop.evaluation import balanced_design, coverage_report
+
+FACTORS = {"risk": ["benign", "pii", "injection"], "channel": ["email", "chat"]}
+design = balanced_design(FACTORS, num_cases=6, seed=7)
+print(coverage_report(design, FACTORS))
+# -> {'risk': {'benign': 2, 'pii': 2, 'injection': 2}, 'channel': {'email': 3, 'chat': 3}}
+```
+
+### Run the two demos
+
+The headline capabilities — a validation report and live runtime monitoring — are
+runnable demos. Clone the repo (the demos aren't shipped in the wheel):
+
+```bash
+git clone https://github.com/knowlytix/beyond-ship-and-pray
+cd beyond-ship-and-pray
+pip install proofloop                       # pulls glassloop from PyPI automatically
+python demos/runtime_monitoring.py          # live ALLOW / DENY / ESCALATE + audit chain
+python demos/validation_report.py           # DoE report -> demos/out/validation_report.html
+```
+
+Both run on the open baseline with **no license**. With the licensed `knowlytix`
+backend and a trained store, the same demos show the real geometric gate — see
+[`demos/README.md`](demos/README.md).
+
 ## The GMS upgrade (open-core)
 
 `proofloop` runs fully without a license. GMS-backed detection — geometric

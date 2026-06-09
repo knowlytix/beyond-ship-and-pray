@@ -5,8 +5,7 @@ The testing/validation chapters, running on the open `proofloop` library
 testing agents, and the GMS calibration appendix.
 
 ```bash
-pip install -e ../beyond-prompt-and-pray   # glassloop (base)
-pip install -e .                            # proofloop
+pip install proofloop   # pulls glassloop (the base) from PyPI automatically
 jupyter lab
 ```
 
