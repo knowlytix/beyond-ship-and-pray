@@ -39,7 +39,7 @@ is the licensed upgrade that plugs into the *same* call site.
 | Capability | What it does | Open (`pip install`) | GMS upgrade (licensed) |
 |---|---|---|---|
 | **Runtime governance** | gate every action *before* it executes | policy + scope gates (`ALLOW`/`DENY`/`ESCALATE`), audit | calibrated **geometric admissibility** gate (out-of-scope / off-manifold actions) |
-| **Verification** | judge a claim against ground truth | string-match + **your own LLM-as-judge** | **GMS verifier** catches fabrications both string-match *and* the LLM judge miss |
+| **Verification** | judge a claim against ground truth | **your own LLM-as-judge** | **GMS grounds the LLM** with exact facts extracted from policy — the LLM reasons, GMS supplies verified ground truth (no hallucinated numbers) |
 | **Validation** | prove it before you ship | **DoE** test design, fault injection, coverage, trajectory scoring | factor attribution, signed verdicts, calibration metrics |
 
 ## The open-core seam
@@ -85,12 +85,18 @@ pip install proofloop          # pulls glassloop (the base) from PyPI
 # licensed GMS backend:  pip install "proofloop[gms]"   (knowlytix — see https://knowlytix.ai/)
 ```
 
-1. **Wrap your agent** in a `GovernanceHarness` with the gates/policies you want.
-2. **Point the validators** at your behavior factors (DoE) and your ground truth.
-3. **Plug your LLM** (any `BaseLM`) into the judge.
-4. **Add the GMS store** trained on *your* workflow to upgrade the gate/verifier.
+1. **Wrap your agent** in a `GovernanceHarness` with the gates you want.
+2. **Bring your policy documents** — your fee schedules, procedures, regulatory
+   rules. They are **extracted offline** into the GMS store (exact-numeric memory
+   + a workflow graph), so the runtime enforces *verified facts*, not a free
+   re-reading of the text.
+3. **Point the validators** at your behavior factors (DoE) and your ground truth.
+4. **Plug your LLM** (any `BaseLM`) into the judge; GMS grounds it with the
+   extracted facts.
 
-Open is the front door; GMS is the calibrated engine behind it.
+Open is the front door; GMS is the calibrated engine behind it. **Policy is a
+document, not code** — you maintain it where your compliance team already does,
+and extraction keeps the store in sync.
 
 ## What's open vs Pro
 
