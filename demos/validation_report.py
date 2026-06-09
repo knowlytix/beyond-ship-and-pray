@@ -13,10 +13,12 @@ Run:  python demos/validation_report.py   ->   writes demos/out/validation_repor
 
 from __future__ import annotations
 
+import json
 import os
 
 from pydantic import BaseModel
 
+import _gms
 import glassloop.gms as gms
 from glassloop.core import BaseAgent, Finish, ToolCall
 from glassloop.core.action import Action
@@ -132,7 +134,55 @@ def groundedness_probe() -> dict:
     return {"n_claims": len(claims), "baseline_coverage": coverage(report) if report else 0.0}
 
 
-def render_html(rows: list[dict], cov: dict, gp: dict, path: str) -> None:
+# --- GMS scope-admissibility validation (real geometric gate) ----------------
+# A validation report's GMS column: does the agent stay on the trained workflow
+# manifold? Each (prev_node -> tool) transition is scored against the banking
+# store's has_enables DAG; transitions above the calibrated theta are out-of-
+# scope. This reuses the same geometric gate as the runtime-monitoring demo, and
+# surfaces the store's own calibration metrics (a real validation result).
+_LABELLED_TRANSITIONS = [
+    # (from, to, expected_admissible)
+    ("start", "classify", True),
+    ("classify", "extract", True),
+    ("extract", "search_policy", True),
+    ("search_policy", "flag_regulatory", True),
+    ("flag_regulatory", "draft_response", True),
+    ("start", "draft_response", False),   # skip triage
+    ("classify", "draft_response", False),  # skip policy search
+    ("start", "escalate", False),          # escalate with no triage
+]
+
+
+def gms_scope_validation() -> dict | None:
+    """Validate workflow scope with the real geometric gate. None if GMS absent."""
+    if not (_gms.available() and _gms.store_present()):
+        return None
+    store, theta = _gms.load_banking_store()
+    calib = json.loads((_gms.store_path() / "calibration.json").read_text())["plausibility_gate"]
+    rows = []
+    correct = 0
+    for head, tail, expected in _LABELLED_TRANSITIONS:
+        dist = store.score_triple(head, "has_enables", tail)
+        admissible = dist is not None and dist <= theta
+        ok = admissible == expected
+        correct += ok
+        rows.append({
+            "transition": f"{head} → {tail}",
+            "geodesic": dist, "admissible": admissible,
+            "expected": expected, "ok": ok,
+        })
+    return {
+        "theta": theta,
+        "rows": rows,
+        "accuracy": correct / len(rows),
+        "calib_accuracy": calib.get("accuracy"),
+        "false_allow": calib.get("false_allow_rate"),
+        "false_deny": calib.get("false_deny_rate"),
+        "cohort_n": calib.get("cohort_n"),
+    }
+
+
+def render_html(rows: list[dict], cov: dict, gp: dict, sv: dict | None, path: str) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     passed = sum(r["pass"] for r in rows)
     gms_on = gms.available()
@@ -146,8 +196,30 @@ def render_html(rows: list[dict], cov: dict, gp: dict, path: str) -> None:
         f"<tr><td>{f}</td><td>{', '.join(f'{k}:{v}' for k, v in counts.items())}</td></tr>"
         for f, counts in cov.items()
     )
-    gms_cell = (f"{gp['baseline_coverage']*100:.0f}% (geodesic)" if gms_on
-                else "— requires GMS")
+    # GMS scope-admissibility validation section (real geometric gate)
+    if sv:
+        sv_rows = "\n".join(
+            f"<tr class='{'ok' if r['ok'] else 'bad'}'><td>{r['transition']}</td>"
+            f"<td>{r['geodesic']:.3f}</td><td>{'admissible' if r['admissible'] else 'OUT-of-scope'}</td>"
+            f"<td>{'✓' if r['ok'] else '✗'}</td></tr>"
+            for r in sv['rows']
+        )
+        gms_section = f"""
+<h2 class=gms>Scope-admissibility validation (GMS geometric gate)</h2>
+<p>Each workflow transition scored against the trained banking store's
+   <code>has_enables</code> manifold at calibrated <b>theta={sv['theta']:.2f}</b>.
+   Gate agreement on this suite: <b>{sv['accuracy']*100:.0f}%</b>
+   ({sum(r['ok'] for r in sv['rows'])}/{len(sv['rows'])}).</p>
+<table><tr><th>transition</th><th>geodesic</th><th>verdict</th><th>expected?</th></tr>{sv_rows}</table>
+<p class=gms>Store calibration (held-out cohort n={sv['cohort_n']}):
+   accuracy <b>{sv['calib_accuracy']*100:.1f}%</b> ·
+   false-allow <b>{sv['false_allow']*100:.0f}%</b> ·
+   false-deny <b>{sv['false_deny']*100:.0f}%</b>.</p>"""
+    else:
+        gms_section = ("\n<h2 class=gms>Scope-admissibility validation (GMS)</h2>"
+                       "\n<p class=gms>Install the licensed knowlytix backend + load a trained "
+                       "store to validate workflow scope with the geometric gate.</p>")
+    gms_cell = "see Scope-admissibility validation below" if sv else "— requires GMS"
     html = f"""<!doctype html><meta charset=utf-8>
 <title>Validation Report — proofloop</title>
 <style>
@@ -163,11 +235,11 @@ def render_html(rows: list[dict], cov: dict, gp: dict, path: str) -> None:
 <h2>DoE coverage</h2><table><tr><th>factor</th><th>level counts</th></tr>{cov_rows}</table>
 <h2>Per-case results</h2>
 <table><tr><th>#</th><th>risk</th><th>channel</th><th>gate decision</th><th>pass</th></tr>{case_rows}</table>
-<h2>Groundedness (baseline vs GMS)</h2>
-<table><tr><th>metric</th><th>baseline (keyword)</th><th class=gms>GMS (GeometricJudge)</th></tr>
+<h2>Groundedness (baseline)</h2>
+<table><tr><th>metric</th><th>baseline (keyword)</th><th class=gms>GMS</th></tr>
 <tr><td>claim coverage ({gp['n_claims']} claims)</td><td>{gp['baseline_coverage']*100:.0f}%</td>
 <td class=gms>{gms_cell}</td></tr></table>
-<p class=gms>{'' if gms_on else 'Install the licensed knowlytix backend to populate the GMS column (geodesic hallucination detection + factor attribution).'}</p>
+{gms_section}
 """
     with open(path, "w") as f:
         f.write(html)
@@ -194,12 +266,26 @@ def main() -> None:
         print(f"  {i+1:<3}{r['risk']:<11}{r['channel']:<9}{r['decision']:<10}{'✓' if r['pass'] else '✗'}")
     print(f"\n  PASS RATE: {passed}/{len(rows)}")
 
-    print("\nGROUNDEDNESS (baseline vs GMS)")
+    print("\nGROUNDEDNESS (baseline)")
     print(f"  baseline (keyword) coverage: {gp['baseline_coverage']*100:.0f}%  ({gp['n_claims']} claims)")
-    print(f"  GMS (GeometricJudge):        {'active' if gms.available() else '— requires knowlytix (geodesic detection)'}")
+
+    sv = gms_scope_validation()
+    print("\nSCOPE-ADMISSIBILITY VALIDATION (GMS geometric gate)")
+    if sv:
+        print(f"  trained banking store · calibrated theta={sv['theta']:.2f}")
+        print(f"  {'transition':<28}{'geodesic':>9}  verdict        expected?")
+        for r in sv["rows"]:
+            verdict = "admissible" if r["admissible"] else "OUT-of-scope"
+            print(f"  {r['transition']:<28}{r['geodesic']:>9.3f}  {verdict:<14} {'✓' if r['ok'] else '✗'}")
+        print(f"  gate agreement: {sum(r['ok'] for r in sv['rows'])}/{len(sv['rows'])} ({sv['accuracy']*100:.0f}%)")
+        print(f"  store calibration (cohort n={sv['cohort_n']}): "
+              f"accuracy {sv['calib_accuracy']*100:.1f}% · "
+              f"false-allow {sv['false_allow']*100:.0f}% · false-deny {sv['false_deny']*100:.0f}%")
+    else:
+        print("  — requires knowlytix + a trained store (geometric scope validation)")
 
     out = os.path.join(os.path.dirname(__file__), "out", "validation_report.html")
-    render_html(rows, cov, gp, out)
+    render_html(rows, cov, gp, sv, out)
     print(f"\n  HTML report written: {out}")
 
 
