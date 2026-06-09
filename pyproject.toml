@@ -39,6 +39,5 @@ GMS = "https://knowlytix.ai/"
 include = ["proofloop*"]
 
 [tool.pytest.ini_options]
-# Scope collection to our own tests so a CI-time checkout of the glassloop
-# sibling repo (into ./_glassloop) is not also collected.
+# Scope collection to our own tests.
 testpaths = ["tests"]
