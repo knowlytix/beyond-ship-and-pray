@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proofloop"
+version = "0.0.1"
+description = "Test, validate and monitor agentic AI — DoE suites, validation reports, and real-time runtime gates. GMS-optional."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "A. Sudjianto" }]
+maintainers = [{ name = "Knowlytix" }]
+keywords = ["ai-agents", "testing", "validation", "evaluation", "runtime-monitoring", "doe", "hallucination", "llm"]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "glassloop",
+    "numpy",
+]
+
+[project.optional-dependencies]
+ml = ["torch>=2.0", "transformers>=4.40"]
+gms = ["knowlytix"]              # licensed, installed separately — see README
+notebooks = ["jupyterlab", "matplotlib", "pandas"]
+dev = ["pytest", "ruff", "black"]
+all = ["proofloop[ml,notebooks]"]
+
+[project.urls]
+Homepage = "https://github.com/knowlytix/beyond-ship-and-pray"
+Repository = "https://github.com/knowlytix/beyond-ship-and-pray"
+Issues = "https://github.com/knowlytix/beyond-ship-and-pray/issues"
+GMS = "https://knowlytix.ai/"
+
+[tool.setuptools.packages.find]
+include = ["proofloop*"]
