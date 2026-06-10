@@ -19,14 +19,19 @@ to [`ARCHITECTURE.md`](../ARCHITECTURE.md):
    calibration.
 
 Needs the licensed `knowlytix` backend + the trained store. The verification LLM
-judge is **provider-agnostic** (any `glassloop` `BaseLM` — Claude, local Qwen,
-your own); it auto-selects whatever is configured and falls back offline.
+judge is **configured by environment, not in the notebook** — set `LLM_PROVIDER`
+and it auto-selects; any `glassloop` `BaseLM` works (Claude, OpenAI, local Qwen,
+your own), with an offline Mock fallback. The factory is `demos/_llm.py`.
 
 ```bash
 pip install "proofloop[notebooks,gms]"   # gms = licensed knowlytix (see below)
-pip install anthropic                     # OR your LLM provider's SDK (judge is swappable)
 export KNOWLYTIX_LICENSE_KEY=...          # + the trained store in demos/data/
-export ANTHROPIC_API_KEY=...              # or ~/.anthropic_key (optional — falls back to Mock)
+
+# pick ONE LLM provider for the judge (default: auto-detect):
+export LLM_PROVIDER=anthropic && pip install anthropic && export ANTHROPIC_API_KEY=...   # or ~/.anthropic_key
+# export LLM_PROVIDER=openai  && pip install openai    && export OPENAI_API_KEY=...      # or ~/.openai_key
+# export LLM_PROVIDER=qwen     # local, no key   |   export LLM_PROVIDER=mock   # offline
+
 jupyter lab demos/demo.ipynb             # then: Kernel → Restart & Run All
 ```
 

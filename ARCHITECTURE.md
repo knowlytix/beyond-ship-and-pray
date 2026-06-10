@@ -64,18 +64,21 @@ running — so the open baseline is always reproducible (and is exactly what CI 
 ## LLM-agnostic
 
 Anything LLM-shaped is a `BaseLM` — a protocol with a single `complete(prompt)`
-method. **Switch providers freely:** Claude, a local Qwen, OpenAI, or your own
-client — the framework never hard-codes a vendor.
+method. **Switch providers by configuration, never by editing code:**
 
-```python
-from glassloop.protocols import BaseLM          # any object with .complete(prompt) -> str
-from glassloop.models import AnthropicAdapter, QwenAdapter, MockLM
-
-judge_lm: BaseLM = AnthropicAdapter()           # or QwenAdapter() (local), or your OpenAI wrapper
+```
+LLM_PROVIDER = anthropic | openai | qwen | mock     # default: auto-detect
+LLM_MODEL    = <model id>                            # + the provider's API key
 ```
 
-The LLM-as-judge tier takes any `BaseLM`. So *your* model judges, and GMS is the
-geometric check that backstops it.
+```python
+from glassloop.protocols import BaseLM   # any object with .complete(prompt) -> str
+judge_lm: BaseLM = build_judge_lm()       # picks the configured provider; bring your own
+```
+
+No vendor name or key lives in the application/notebook — the factory reads the
+environment (see `demos/_llm.py`). So *your* model judges, and GMS backstops it
+with verified facts.
 
 ## How you use it
 
