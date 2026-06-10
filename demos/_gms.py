@@ -17,6 +17,8 @@ it is *not* redistributed with the open repo.
 
 from __future__ import annotations
 
+import _env  # noqa: F401  (auto-loads demos/.env)
+
 import json
 import os
 from pathlib import Path

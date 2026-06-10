@@ -18,22 +18,22 @@ to [`ARCHITECTURE.md`](../ARCHITECTURE.md):
 3. **Validation** — a DoE coverage matrix + the scope gate proven by held-out
    calibration.
 
-Needs the licensed `knowlytix` backend + the trained store. The verification LLM
-judge is **configured by environment, not in the notebook** — set `LLM_PROVIDER`
-and it auto-selects; any `glassloop` `BaseLM` works (Claude, OpenAI, local Qwen,
-your own), with an offline Mock fallback. The factory is `demos/_llm.py`.
+Needs the licensed `knowlytix` backend + the trained store. **Configuration lives
+in a `.env` file, not in the notebook** — copy the template and fill it in:
 
 ```bash
 pip install "proofloop[notebooks,gms]"   # gms = licensed knowlytix (see below)
-export KNOWLYTIX_LICENSE_KEY=...          # + the trained store in demos/data/
-
-# pick ONE LLM provider for the judge (default: auto-detect):
-export LLM_PROVIDER=anthropic && pip install anthropic && export ANTHROPIC_API_KEY=...   # or ~/.anthropic_key
-# export LLM_PROVIDER=openai  && pip install openai    && export OPENAI_API_KEY=...      # or ~/.openai_key
-# export LLM_PROVIDER=qwen     # local, no key   |   export LLM_PROVIDER=mock   # offline
-
+cp demos/.env.example demos/.env          # then edit demos/.env (gitignored)
 jupyter lab demos/demo.ipynb             # then: Kernel → Restart & Run All
 ```
+
+`demos/.env` is **auto-loaded** (see `demos/_env.py`) — no keys or vendor names in
+any cell. Key settings (full list in `.env.example`):
+
+- `KNOWLYTIX_LICENSE_KEY` — the licensed GMS backend (blank → open baseline)
+- `LLM_PROVIDER` = `anthropic` | `openai` | `qwen` | `mock` (+ the provider's key) —
+  the judge is provider-agnostic (any `glassloop` `BaseLM`); default auto-detects.
+  The factory is `demos/_llm.py`.
 
 The `.py` demos below are the scriptable / CI-friendly versions of the same tech.
 

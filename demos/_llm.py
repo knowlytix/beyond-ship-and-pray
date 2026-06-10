@@ -17,6 +17,8 @@ own: anything with ``.complete(prompt)`` works in place of these.
 
 from __future__ import annotations
 
+import _env  # noqa: F401  (auto-loads demos/.env)
+
 import os
 
 _DEFAULT_MODEL = {"anthropic": "claude-sonnet-4-6", "openai": "gpt-4o-mini"}
