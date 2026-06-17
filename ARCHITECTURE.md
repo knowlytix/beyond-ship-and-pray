@@ -1,7 +1,7 @@
 # Architecture
 
 `proofloop` is the **test / validate / monitor** layer for agentic AI. It sits on
-top of `glassloop` (the governed agent loop) and is **open-core**: everything runs
+top of `forgeloop` (the governed agent loop) and is **open-core**: everything runs
 free, and a licensed **GMS backend** (`knowlytix`) snaps in to upgrade detection
 from heuristic to calibrated-geometric — through the *same* interfaces, so your
 code doesn't change.
@@ -13,7 +13,7 @@ code doesn't change.
 └───────────────┬───────────────────────────────────────────────────┘
                 │
 ┌───────────────▼───────────────────────────────────────────────────┐
-│  glassloop   — the governed agent loop (open, Apache-2.0)          │
+│  forgeloop   — the governed agent loop (open, Apache-2.0)          │
 │    typed actions · gates (ALLOW/DENY/ESCALATE) · budgets ·         │
 │    human escalation · hash-chained audit · BaseLM adapters         │
 └───────────────┬───────────────────────────────────────────────────┘
@@ -47,7 +47,7 @@ is the licensed upgrade that plugs into the *same* call site.
 GMS is never required. The seam is one call:
 
 ```python
-import glassloop.gms as gms
+import forgeloop.gms as gms
 gms.available()        # True iff the licensed knowlytix backend is installed
 ```
 
@@ -72,7 +72,7 @@ LLM_MODEL    = <model id>                            # + the provider's API key
 ```
 
 ```python
-from glassloop.protocols import BaseLM   # any object with .complete(prompt) -> str
+from forgeloop.protocols import BaseLM   # any object with .complete(prompt) -> str
 judge_lm: BaseLM = build_judge_lm()       # picks the configured provider; bring your own
 ```
 
@@ -83,7 +83,7 @@ with verified facts.
 ## How you use it
 
 ```bash
-pip install proofloop          # pulls glassloop (the base) from PyPI
+pip install proofloop          # pulls forgeloop (the base) from PyPI
 # optional model tools:  pip install "proofloop[ml]"
 # licensed GMS backend:  pip install "proofloop[gms]"   (knowlytix — see https://knowlytix.ai/)
 ```

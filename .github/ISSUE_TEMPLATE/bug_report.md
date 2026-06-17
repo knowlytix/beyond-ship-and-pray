@@ -22,7 +22,7 @@ What you expected to happen.
 - Package version:
 - Python version (3.12+ required):
 - OS:
-- GMS backend installed? run: `python -c "import glassloop.gms as g; print(g.available())"`
+- GMS backend installed? run: `python -c "import forgeloop.gms as g; print(g.available())"`
 
 **Does it reproduce on the open baseline (knowlytix absent)?**
 - [ ] Yes — reproduces on the open baseline

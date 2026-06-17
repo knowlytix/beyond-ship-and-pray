@@ -18,21 +18,21 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 import _gms
-import glassloop.gms as gms
-from glassloop.core import BaseAgent, Finish, ToolCall
-from glassloop.core.action import Action
-from glassloop.core.state import AgentState
-from glassloop.core.task import TaskSpec
-from glassloop.governance import (
+import forgeloop.gms as gms
+from forgeloop.core import BaseAgent, Finish, ToolCall
+from forgeloop.core.action import Action
+from forgeloop.core.state import AgentState
+from forgeloop.core.task import TaskSpec
+from forgeloop.governance import (
     GovernanceHarness,
     pii_policy,
     prohibited_advice_policy,
     prompt_injection_policy,
 )
-from glassloop.governance.gates import PlausibilityGate, PolicyGate, SyntaxGate
-from glassloop.gms_backend import GMSPlausibilityGate
-from glassloop.tools import GovernedToolExecutor, ToolRegistry
-from glassloop.tools.base import RiskLevel, Tool
+from forgeloop.governance.gates import PlausibilityGate, PolicyGate, SyntaxGate
+from forgeloop.gms_backend import GMSPlausibilityGate
+from forgeloop.tools import GovernedToolExecutor, ToolRegistry
+from forgeloop.tools.base import RiskLevel, Tool
 
 
 # --- a single outward-facing tool the agent can call ------------------------

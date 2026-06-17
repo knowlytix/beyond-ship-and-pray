@@ -31,7 +31,7 @@ from proofloop.evaluation.metrics import (
     tool_failure_count,
 )
 from proofloop.evaluation.test_cases import DEFAULT_FACTORS, TestCase, generate_test_cases
-from glassloop.core.trajectory import Trajectory, collect
+from forgeloop.core.trajectory import Trajectory, collect
 
 __all__ = [
     "ALL_INJECTORS",

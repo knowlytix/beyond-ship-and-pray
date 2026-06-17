@@ -1,6 +1,6 @@
 """Shared GMS wiring for the demos — loads the licensed knowlytix backend.
 
-This is the *real* GMS "after". The open baseline (glassloop + proofloop) runs
+This is the *real* GMS "after". The open baseline (forgeloop + proofloop) runs
 with no license; when `knowlytix` is installed and a trained store is present,
 these helpers load it so the demos can show the geometric gate / judge live.
 
@@ -24,7 +24,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-import glassloop.gms as gms
+import forgeloop.gms as gms
 
 _DEMOS_DIR = Path(__file__).resolve().parent
 _DEFAULT_STORE = _DEMOS_DIR / "data" / "gms_banking_store"
