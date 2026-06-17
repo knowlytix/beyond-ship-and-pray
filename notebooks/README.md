@@ -1,18 +1,18 @@
 # Notebooks — Beyond Ship and Pray
 
 The testing/validation chapters, running on the open `proofloop` library
-(which builds on `glassloop`): trajectory evaluation, failure-mode DoE,
+(which builds on `forgeloop`): trajectory evaluation, failure-mode DoE,
 testing agents, and the GMS calibration appendix.
 
 ```bash
-pip install proofloop   # pulls glassloop (the base) from PyPI automatically
+pip install proofloop   # pulls forgeloop (the base) from PyPI automatically
 jupyter lab
 ```
 
 ## Tiers
 
 - **Open (no license):** `10_trajectory_evaluation` and `11_failure_modes_doe`
-  run on `glassloop` + `proofloop`. Their GMS cells (geometric judge) print a
+  run on `forgeloop` + `proofloop`. Their GMS cells (geometric judge) print a
   "requires GMS" hint when `knowlytix` is absent; the rest runs.
 - **Pro tier (licensed):** `16_testing_agents` uses `CapstoneTestHarness`, which
   ships in the licensed *Beyond Ship and Pray, Pro Edition* (`knowlytix`). The

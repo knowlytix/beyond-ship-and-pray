@@ -32,7 +32,7 @@ any cell. Key settings (full list in `.env.example`):
 
 - `KNOWLYTIX_LICENSE_KEY` — the licensed GMS backend (blank → open baseline)
 - `LLM_PROVIDER` = `anthropic` | `openai` | `qwen` | `mock` (+ the provider's key) —
-  the judge is provider-agnostic (any `glassloop` `BaseLM`); default auto-detects.
+  the judge is provider-agnostic (any `forgeloop` `BaseLM`); default auto-detects.
   The factory is `demos/_llm.py`.
 
 The `.py` demos below are the scriptable / CI-friendly versions of the same tech.
@@ -40,7 +40,7 @@ The `.py` demos below are the scriptable / CI-friendly versions of the same tech
 ## Setup (open baseline — no license)
 
 ```bash
-pip install proofloop          # pulls glassloop (the base library) from PyPI automatically
+pip install proofloop          # pulls forgeloop (the base library) from PyPI automatically
 ```
 
 Then run the demos from the repo root (clone it — the demos aren't in the wheel).
@@ -101,5 +101,5 @@ falls short (the install hint points at GMS). With the licensed
 [`knowlytix`](https://knowlytix.ai/) backend + a trained store, the same demos
 run the **real geometric gate** (admissibility scoring on the trained manifold)
 and surface the store's calibration — the *Beyond Ship and Pray, Pro Edition*.
-These demos depend only on `glassloop` + `proofloop` + `knowlytix` — no other
+These demos depend only on `forgeloop` + `proofloop` + `knowlytix` — no other
 packages.

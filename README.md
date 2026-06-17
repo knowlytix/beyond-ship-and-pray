@@ -39,7 +39,7 @@ pip install "proofloop[ml]"           # + open-weight model tools
 pip install "proofloop[gms]"          # + the licensed GMS backend (knowlytix)
 ```
 
-`proofloop` builds on [`glassloop`](https://github.com/knowlytix/beyond-prompt-and-pray)
+`proofloop` builds on [`forgeloop`](https://github.com/knowlytix/beyond-prompt-and-pray)
 (the governed agent loop) and adds the testing, validation, and monitoring layer.
 
 ## Quickstart
@@ -64,7 +64,7 @@ runnable demos. Clone the repo (the demos aren't shipped in the wheel):
 ```bash
 git clone https://github.com/knowlytix/beyond-ship-and-pray
 cd beyond-ship-and-pray
-pip install proofloop                       # pulls glassloop from PyPI automatically
+pip install proofloop                       # pulls forgeloop from PyPI automatically
 python demos/runtime_monitoring.py          # live ALLOW / DENY / ESCALATE + audit chain
 python demos/validation_report.py           # DoE report -> demos/out/validation_report.html
 ```
@@ -80,7 +80,7 @@ hallucination judging, factor attribution, signed verdicts — requires the lice
 [`knowlytix`](https://knowlytix.ai/) package, imported lazily:
 
 ```python
-import glassloop.gms as gms
+import forgeloop.gms as gms
 gms.available()   # True if the licensed backend is installed
 ```
 

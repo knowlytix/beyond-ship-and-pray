@@ -11,7 +11,7 @@ developed here; please keep contributions to the open baseline.
 git clone https://github.com/knowlytix/beyond-ship-and-pray.git
 cd beyond-ship-and-pray
 python3.12 -m venv .venv && source .venv/bin/activate
-pip install "glassloop @ git+https://github.com/knowlytix/beyond-prompt-and-pray.git"  # base library
+pip install "forgeloop @ git+https://github.com/knowlytix/beyond-prompt-and-pray.git"  # base library
 pip install -e ".[dev]"
 pytest -q
 ```

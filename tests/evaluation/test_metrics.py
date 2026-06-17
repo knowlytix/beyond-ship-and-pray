@@ -1,4 +1,4 @@
-from glassloop.core import (
+from forgeloop.core import (
     AgentState,
     BaseAgent,
     Budget,

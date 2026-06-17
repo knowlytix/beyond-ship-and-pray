@@ -1,6 +1,6 @@
 """Swappable LLM backend for the demo judge.
 
-The judge is provider-agnostic: it needs any `glassloop` ``BaseLM`` — i.e. any
+The judge is provider-agnostic: it needs any `forgeloop` ``BaseLM`` — i.e. any
 object with ``.complete(prompt) -> str``. Configure it with environment
 variables (no code change to switch vendors):
 
@@ -52,7 +52,7 @@ class OpenAIAdapter:
 
 
 def _mock():
-    from glassloop.models import MockLM
+    from forgeloop.models import MockLM
     return MockLM(), "Mock (offline fallback)"
 
 
@@ -64,7 +64,7 @@ def build_judge_lm():
     def anthropic():
         k = _key("ANTHROPIC_API_KEY", "~/.anthropic_key")
         if k:
-            from glassloop.models import AnthropicAdapter
+            from forgeloop.models import AnthropicAdapter
             m = model or _DEFAULT_MODEL["anthropic"]
             return AnthropicAdapter(model=m, api_key=k), f"Anthropic {m}"
 
@@ -75,7 +75,7 @@ def build_judge_lm():
             return OpenAIAdapter(model=m, api_key=k), f"OpenAI {m}"
 
     def qwen():
-        from glassloop.models import QwenAdapter
+        from forgeloop.models import QwenAdapter
         return QwenAdapter(), f"Qwen local ({model or 'default'})"
 
     try:

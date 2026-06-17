@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from glassloop.core.task import TaskSpec
+from forgeloop.core.task import TaskSpec
 from proofloop.evaluation.doe import balanced_design
 from proofloop.evaluation.failure_modes import FailureMode
 

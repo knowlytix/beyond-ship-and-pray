@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from glassloop.core.trajectory import Trajectory
+from forgeloop.core.trajectory import Trajectory
 
 
 def task_success(traj: Trajectory) -> float:
