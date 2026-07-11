@@ -19,3 +19,7 @@ demos/out/
 
 # Licensed GMS demo data (not redistributed)
 demos/data/
+
+# generated notebook figures
+figures/
+notebooks/figures/
