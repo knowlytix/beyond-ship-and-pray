@@ -87,7 +87,7 @@ def emit_draft_sft(
     summaries: dict[str, str] | None = None,
     goldens: dict[str, dict] | None = None,
     validate: bool = True,
-    source: str = "gmstest",
+    source: str = "proofloop.suite",
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Grounded (user, assistant) pairs. Returns (kept, dropped).
 

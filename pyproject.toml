@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proofloop"
-version = "0.1.2"
+version = "0.1.3"
 description = "Test, validate and monitor agentic AI — DoE suites, validation reports, and real-time runtime gates. GMS-optional."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -25,7 +25,7 @@ dependencies = [
 
 [project.optional-dependencies]
 ml = ["torch>=2.0", "transformers>=4.40"]
-gms = ["knowlytix"]              # licensed, installed separately — see README
+gms = ["knowlytix", "pandas"]    # licensed knowlytix (installed separately); pandas for suite.attribute
 notebooks = ["jupyterlab", "matplotlib", "pandas"]
 dev = ["pytest", "ruff", "black"]
 all = ["proofloop[ml,notebooks]"]
