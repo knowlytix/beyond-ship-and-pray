@@ -7,4 +7,4 @@ factor attribution (optional, via the licensed knowlytix backend).
 Builds on the forgeloop base library.
 """
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
