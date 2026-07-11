@@ -20,6 +20,7 @@ classifiers = [
 dependencies = [
     "forgeloop",
     "numpy",
+    "pyyaml",
 ]
 
 [project.optional-dependencies]
