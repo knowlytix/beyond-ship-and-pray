@@ -108,6 +108,11 @@ import forgeloop.gms as gms
 gms.available()   # True if the licensed backend is installed
 ```
 
+The GMS-native chapters (notebooks `20`–`28`: knowledge graphs, GEODE, base
+sourcing, enrichment/training capstones) need the backend. It's a one-time setup:
+**[get a free developer license](https://knowlytix.ai/signup/)**, install
+`knowlytix`, and every GMS notebook runs.
+
 The production-grade, GMS-native edition is the *Beyond Ship and Pray, Pro
 Edition* — see [knowlytix.ai](https://knowlytix.ai/).
 
