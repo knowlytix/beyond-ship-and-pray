@@ -38,6 +38,10 @@ GMS = "https://knowlytix.ai/"
 [tool.setuptools.packages.find]
 include = ["proofloop*"]
 
+[tool.setuptools.package-data]
+# Bundle the base/factor/profile catalog YAMLs shipped with proofloop.suite.
+"proofloop.suite" = ["catalogs/*.yaml"]
+
 [tool.pytest.ini_options]
 # Scope collection to our own tests.
 testpaths = ["tests"]
