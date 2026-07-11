@@ -25,6 +25,7 @@ validation.
 ## What's inside
 
 - **Validation reports** — DoE test design, fault injection, coverage, trajectory scoring
+- **Catalog-driven test suites** — build scenarios from base/factor catalogs, emit SFT data, and score a system-under-test (`proofloop.suite`)
 - **Runtime monitoring** — `ALLOW` / `DENY` / `ESCALATE` gates that stop bad actions live
 - **Hallucination & groundedness checks** — catch unsupported claims pre- and post-deploy
 - **Tamper-evident audit** — hash-chained record of every decision and stop
@@ -55,6 +56,29 @@ design = balanced_design(FACTORS, num_cases=6, seed=7)
 print(coverage_report(design, FACTORS))
 # -> {'risk': {'benign': 2, 'pii': 2, 'injection': 2}, 'channel': {'email': 3, 'chat': 3}}
 ```
+
+### Build a full test suite from catalogs
+
+For richer suites, `proofloop.suite` builds scenarios from base/factor catalogs,
+holds ground truth invariant, and scores a system-under-test — all on the open
+baseline (no GMS required):
+
+```python
+from proofloop import suite as ts
+
+cat = ts.Catalog.load()                                   # bundled base/factor/profile catalogs
+sv = ts.resolve(cat, ["exact_recall"], ["clarity"], mode="embedded")
+src = ts.UserBaseSource([{"query": "What is the overdraft fee?", "answer": "35"}])
+scenarios = ts.compose(sv, src.items(), n_runs=30, seed=7)
+
+rows = ts.evaluate.run(scenarios, my_sut)                 # my_sut(query, context="") -> answer
+print(ts.evaluate.summary(rows))                          # {'n': 30, 'accuracy': ...}
+```
+
+The open-core seam runs the same call sites; `knowlytix` upgrades three of them:
+`simple_design` → `graphdoe_design` (Sobol space-filling), `UserBaseSource` →
+`CatalogBaseSource` (mine a GMS store), and `weak_link` → `attribute` (calibrated
+logistic factor attribution).
 
 ### Run the two demos
 
