@@ -24,7 +24,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-ml = ["torch>=2.0", "transformers>=4.40"]
+ml = ["torch>=2.0", "transformers>=4.40", "accelerate"]
 gms = ["knowlytix", "pandas"]    # licensed knowlytix (installed separately); pandas for suite.attribute
 notebooks = ["jupyterlab", "matplotlib", "pandas"]
 dev = ["pytest", "ruff", "black"]
