@@ -1,0 +1,168 @@
+{
+  "n_runs": 120,
+  "accuracy": 0.592,
+  "workflow_adherence": 1.0,
+  "audit_verifies": true,
+  "gate_stack": {
+    "policy_gate": {
+      "refuse_path": {
+        "n": 30,
+        "correct": 24,
+        "detection_rate": 0.8
+      },
+      "allow_path": {
+        "n": 90,
+        "no_false_refusal": 86,
+        "rate": 0.956
+      }
+    },
+    "plausibility_gate": {
+      "theta": 0.4,
+      "legal": {
+        "n": 5,
+        "allowed": 5,
+        "max_score": 0.326
+      },
+      "illegal": {
+        "n": 20,
+        "denied": 14,
+        "min_score": 0.287
+      },
+      "errors": [
+        {
+          "prev": "start",
+          "tool": "extract_facts",
+          "legal": false,
+          "decision": "allow",
+          "score": 0.353,
+          "correct": 0
+        },
+        {
+          "prev": "classify",
+          "tool": "classify_complaint",
+          "legal": false,
+          "decision": "allow",
+          "score": 0.287,
+          "correct": 0
+        },
+        {
+          "prev": "classify",
+          "tool": "search_policy",
+          "legal": false,
+          "decision": "allow",
+          "score": 0.376,
+          "correct": 0
+        },
+        {
+          "prev": "extract",
+          "tool": "extract_facts",
+          "legal": false,
+          "decision": "allow",
+          "score": 0.305,
+          "correct": 0
+        },
+        {
+          "prev": "search_policy",
+          "tool": "search_policy",
+          "legal": false,
+          "decision": "allow",
+          "score": 0.318,
+          "correct": 0
+        },
+        {
+          "prev": "flag_regulatory",
+          "tool": "flag_regulatory",
+          "legal": false,
+          "decision": "allow",
+          "score": 0.325,
+          "correct": 0
+        }
+      ]
+    }
+  },
+  "seed_balance": {
+    "case-001": 6,
+    "case-002": 6,
+    "case-003": 6,
+    "case-004": 6,
+    "case-005": 6,
+    "case-006": 6,
+    "case-007": 6,
+    "case-008": 6,
+    "case-009": 6,
+    "case-010": 6,
+    "case-011": 6,
+    "case-012": 6,
+    "case-013": 6,
+    "case-014": 6,
+    "case-015": 6,
+    "case-016": 6,
+    "case-017": 6,
+    "case-018": 6,
+    "case-019": 6,
+    "case-020": 6
+  },
+  "clarity_balance": {
+    "ambiguous": 27,
+    "misleading": 46,
+    "clear": 47
+  },
+  "attribution": [
+    {
+      "factor": "clarity",
+      "G2": 3.17,
+      "p_adj": 0.6162,
+      "pseudo_r2": 0.02,
+      "significant_adj": false,
+      "odds_ratios": {
+        "ambiguous": 1.0,
+        "clear": 1.47,
+        "misleading": 0.69
+      }
+    },
+    {
+      "factor": "reasoning_cue",
+      "G2": 1.73,
+      "p_adj": 0.633,
+      "pseudo_r2": 0.011,
+      "significant_adj": false,
+      "odds_ratios": {
+        "cot": 1.0,
+        "misleading_cue": 1.65,
+        "none": 1.91
+      }
+    },
+    {
+      "factor": "entity_aliasing",
+      "G2": 0.21,
+      "p_adj": 0.9019,
+      "pseudo_r2": 0.001,
+      "significant_adj": false,
+      "odds_ratios": {
+        "alias": 1.0,
+        "canonical": 1.18,
+        "typo": 0.99
+      }
+    }
+  ],
+  "weak_link": {
+    "flag_regulatory": 1,
+    "classify_complaint": 19
+  },
+  "per_tool": {
+    "classify_complaint": {
+      "scored": 92,
+      "accuracy": 0.793
+    },
+    "search_policy": {
+      "scored": 44,
+      "accuracy": 0.705,
+      "abstained": 13,
+      "coverage": 0.772
+    },
+    "flag_regulatory": {
+      "scored": 18,
+      "accuracy": 0.944
+    }
+  }
+}
